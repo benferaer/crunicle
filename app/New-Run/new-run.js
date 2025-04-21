@@ -8,10 +8,11 @@ export default function NewRun() {
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
   const [submittedData, setSubmittedData] = useState(null);
+  const [title, setTitle] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newRunData = { date, description };
+    const newRunData = { date, title, description };
     console.log('New Run Data:', newRunData);
     setSubmittedData(newRunData);
     // You can add logic here to send the data to a server or API
@@ -27,6 +28,14 @@ export default function NewRun() {
             onChange={(date) => setDate(date)}
             className="border p-2 rounded max-w-2xl mb-5"
           />
+          <label className="block font-bold">Run Title:</label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="border p-2 rounded w-[600px] mt-1 mb-5"
+            required
+          />
           <label className="block font-bold">Run Goal:</label>
           <textarea
             value={description}
@@ -35,7 +44,7 @@ export default function NewRun() {
             rows="5"
             required
           />
-          <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+          <button type="submit" className="bg-amber-600 text-white font-bold p-4 rounded-full text-2xl shadow-lg cursor-pointer w-[175px] mx-auto">
             Submit
           </button>
         </form>
