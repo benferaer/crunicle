@@ -68,42 +68,71 @@ export default function EditRun({ params: paramsPromise }) {
     }
   };
 
+  const handleCancel = () => {
+    router.push("/"); // Navigate back to the homepage
+  };
+
   if (!params || !title || !description) return <p>Loading...</p>;
 
   return (
-    <main className="flex flex-col row-start-2 items-center sm:items-start">
-      <div className="border p-4 rounded-2xl shadow-xl mt-15 mb-20 ml-30 mr-30 p-20">
-        <form onSubmit={handleUpdate} className="flex flex-col gap-4">
-          <label className="block font-bold">Date of Run:</label>
-          <DatePicker
-            selected={date}
-            onChange={(date) => setDate(date)}
-            className="border p-2 rounded max-w-2xl mb-5"
-            required
-          />
-          <label className="block font-bold">Run Title:</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="border p-2 rounded w-[600px] mt-1 mb-5"
-            required
-          />
-          <label className="block font-bold">Run Goal:</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="border p-2 rounded w-[600px] mt-1 mb-5"
-            rows="5"
-            required
-          />
-          <button
-            type="submit"
-            className="bg-amber-600 text-white font-bold p-4 rounded-full text-2xl shadow-lg cursor-pointer w-[175px] mx-auto"
-            disabled={loading}
-          >
-            {loading ? "Updating..." : "Update"}
-          </button>
+    <main className="flex flex-col items-center justify-center min-h-screen w-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white">
+      <div className="border border-gray-600 bg-gray-800 p-10 rounded-2xl shadow-2xl w-full max-w-7xl">
+        <h1 className="text-4xl font-bold text-center mb-8 text-amber-500">Edit Your Run</h1>
+        <form onSubmit={handleUpdate} className="flex flex-col gap-6">
+          {/* Date Picker */}
+          <div>
+            <label className="block font-bold text-lg mb-2">Date of Run:</label>
+            <DatePicker
+              selected={date}
+              onChange={(date) => setDate(date)}
+              className="border border-gray-500 bg-gray-700 text-white p-3 rounded w-full"
+              required
+            />
+          </div>
+
+          {/* Run Title */}
+          <div>
+            <label className="block font-bold text-lg mb-2">Run Title:</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="border border-gray-500 bg-gray-700 text-white p-3 rounded w-full"
+              placeholder="Enter the title of your run"
+              required
+            />
+          </div>
+
+          {/* Run Goal */}
+          <div>
+            <label className="block font-bold text-lg mb-2">Run Goal:</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="border border-gray-500 bg-gray-700 text-white p-3 rounded w-full"
+              rows="5"
+              placeholder="Describe your goal for this run"
+              required
+            />
+          </div>
+
+          {/* Buttons */}
+          <div className="flex justify-between mt-6">
+            <button
+              type="button"
+              onClick={handleCancel} // Call the handleCancel function
+              className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-full text-lg shadow-lg transition duration-200"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-6 rounded-full text-lg shadow-lg transition duration-200"
+              disabled={loading} // Disable button while loading
+            >
+              {loading ? "Updating..." : "Update"}
+            </button>
+          </div>
         </form>
       </div>
     </main>
