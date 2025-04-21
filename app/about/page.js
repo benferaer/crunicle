@@ -80,8 +80,8 @@ export default function About() {
         <p className="text-lg text-gray-300 leading-relaxed">
           cRUNicle is a personalized running journal app designed to help beginner runners like myself stay motivated, organized, and consistent in building a running habit. Recognizing the challenges that come with starting a new fitness routine, cRUNicle offers a simple and intuitive platform to plan out weekly running schedules, set achievable goals, and track progress over time.
         </p>
-        <p className="text-lg text-gray-300 leading-relaxed mt-4">
-          Whether you're just starting your running journey or looking for a way to stay on track, cRUNicle is here to support you every step of the way. Let's make running a part of your life, one step at a time.
+        <p className="text-lg text-gray-300 leading-relaxed">
+          Whether you&#39;re just starting your running journey or looking for a way to stay on track, cRUNicle is here to support you every step of the way. Let&#39;s make running a part of your life, one step at a time.
         </p>
       </section>
     </div>
