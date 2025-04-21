@@ -1,8 +1,6 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { getFirestore, collection, query, where, getDocs, addDoc, deleteDoc, doc, updateDoc } from "firebase/firestore"; // Add addDoc here
 import { format } from "date-fns"; // Add this import
 
 // Your web app's Firebase configuration
@@ -41,5 +39,41 @@ export const fetchUserRuns = async (userId) => {
   } catch (error) {
     console.error("Error fetching runs:", error);
     throw error; // Re-throw the error for handling
+  }
+};
+
+// Function to add a new run to Firestore
+export const addNewRun = async (runData) => {
+  try {
+    const docRef = await addDoc(collection(db, "runs"), runData);
+    console.log("Document written with ID: ", docRef.id);
+    return docRef.id; // Return the document ID
+  } catch (error) {
+    console.error("Error adding document: ", error);
+    throw error; // Re-throw the error for handling in the calling function
+  }
+};
+
+// Function to delete a run from Firestore
+export const deleteRun = async (runId) => {
+  try {
+    const runDocRef = doc(db, "runs", runId); // Reference to the specific run document
+    await deleteDoc(runDocRef); // Delete the document
+    console.log(`Run with ID ${runId} has been deleted.`);
+  } catch (error) {
+    console.error("Error deleting run:", error);
+    throw error; // Re-throw the error for handling in the calling function
+  }
+};
+
+// Function to update a run in Firestore
+export const updateRun = async (runId, updatedData) => {
+  try {
+    const runDocRef = doc(db, "runs", runId); // Reference to the specific run document
+    await updateDoc(runDocRef, updatedData); // Update the document with the new data
+    console.log(`Run with ID ${runId} has been updated.`);
+  } catch (error) {
+    console.error("Error updating run:", error);
+    throw error; // Re-throw the error for handling in the calling function
   }
 };

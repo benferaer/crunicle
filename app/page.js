@@ -4,9 +4,9 @@ import { useUserAuth } from "./_utils/auth-context";
 import { format, addDays, isSameMonth } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { fetchUserRuns } from "./_utils/firebase";
+import { fetchUserRuns, deleteRun } from "./_utils/firebase";
 import fetchWeatherData from "./weatherApi/weather";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { ChevronLeftIcon, ChevronRightIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 export default function Page() {
   const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
@@ -15,6 +15,7 @@ export default function Page() {
   const [currentWeekStart, setCurrentWeekStart] = useState(new Date()); // Start with today
   const [runs, setRuns] = useState([]); // Store fetched runs
   const [weatherData, setWeatherData] = useState(null); // Store weather data
+  const [loading, setLoading] = useState(false); // To handle loading state
 
   const handleSignIn = async () => {
     try {
@@ -87,6 +88,23 @@ export default function Page() {
     getData();
   }, [user]);
 
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this run?")) {
+      return; // Exit if the user cancels the confirmation
+    }
+
+    setLoading(true); // Start loading
+    try {
+      await deleteRun(run.id); // Call the deleteRun function
+      console.log(`Run with ID ${run.id} deleted successfully.`);
+      // Optionally, refresh the data or remove the run from the UI
+    } catch (error) {
+      console.error("Error deleting run:", error);
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
+
   return (
     <main className="p-4">
       {user ? (
@@ -123,7 +141,7 @@ export default function Page() {
             {thisWeek.map((day, index) => (
               <div
                 key={index}
-                className={`flex items-start border-b py-2 ${
+                className={`flex items-start border-b py-2 h-[300px] ${
                   day.isCurrentMonth ? "text-white" : "text-gray-400"
                 }`}
               >
@@ -134,7 +152,7 @@ export default function Page() {
                 </div>
 
                 {/* Runs Column */}
-                <div className="flex-grow ml-10 mb-3 flex flex-wrap justify-center gap-15 mt-5 mb-10">
+                <div className="flex-grow ml-10 flex flex-wrap justify-center my-auto gap-15 ">
                   {runs.filter((run) => run.date === day.date).length > 0 ? (
                     runs
                       .filter((run) => run.date === day.date) // Match runs to the current date
@@ -148,7 +166,8 @@ export default function Page() {
                         return (
                           <div
                             key={run.id}
-                            className="relative bg-gray-800 text-white p-6 rounded-3xl shadow-lg w-[400px] flex flex-col gap-4"
+                            className="relative bg-gray-800 text-white p-6 rounded-3xl shadow-lg w-[400px] flex flex-col gap-4 cursor-pointer hover:shadow-xl transition-shadow"
+                            onClick={() => router.push(`/Edit-Run/${run.id}`)} // Navigate to the Edit-Run page with the run ID
                           >
                             {/* Badge */}
                             {weatherForDay && (
@@ -160,7 +179,7 @@ export default function Page() {
                                     ? "bg-orange-500 text-white"
                                     : weatherForDay.day.avgtemp_c >= 0 && weatherForDay.day.avgtemp_c <= 10
                                     ? "bg-blue-300 text-black"
-                                    : ""
+                                    : "bg-gray-500 text-white"
                                 }`}
                               >
                                 {weatherForDay.day.avgtemp_c > 10 && weatherForDay.day.avgtemp_c < 20
@@ -169,12 +188,36 @@ export default function Page() {
                                   ? "May Be a Bit Hot"
                                   : weatherForDay.day.avgtemp_c >= 0 && weatherForDay.day.avgtemp_c <= 10
                                   ? "May Be Chilly"
-                                  : ""}
+                                  : "No Data"}
                               </div>
                             )}
 
+                            {/* Trash Icon */}
+                            <button
+                              onClick={async (e) => {
+                                e.stopPropagation(); // Prevent triggering the card click event
+                                if (!window.confirm("Are you sure you want to delete this run?")) return;
+                                setLoading(true);
+                                try {
+                                  await deleteRun(run.id); // Call the deleteRun function
+                                  console.log(`Run with ID ${run.id} deleted successfully.`);
+                                  // Refresh the runs after deletion
+                                  const updatedRuns = await fetchUserRuns(user.uid);
+                                  setRuns(updatedRuns);
+                                } catch (error) {
+                                  console.error("Error deleting run:", error);
+                                } finally {
+                                  setLoading(false);
+                                }
+                              }}
+                              className="absolute bottom-4 right-4 text-red-500 hover:text-red-700 cursor-pointer"
+                              disabled={loading} // Disable button while loading
+                            >
+                              <TrashIcon className="h-6 w-6" /> {/* Heroicons Trash Icon */}
+                            </button>
+
                             {/* Run Title */}
-                            <h3 className="text-2xl font-bold">{run.title}</h3>
+                            <h3 className="text-2xl font-bold mt-7">{run.title}</h3>
 
                             {/* Run Goal */}
                             <p className="text-gray-300 italic">{run.description}</p>
