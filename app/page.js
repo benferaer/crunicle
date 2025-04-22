@@ -328,13 +328,24 @@ export default function Page() {
           </>
         ) : (
           <>
-            <h1 className="text-2xl font-bold mb-4">Welcome to Crunicle</h1>
+          {/* Sign-In Page */}
+          <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white">
+            {/* Welcome Message */}
+            <h1 className="text-4xl font-bold mb-6 text-amber-400">
+              Welcome to <span className="italic">cRUNicle</span>
+            </h1>
+            <p className="text-lg text-gray-300 mb-10 text-center max-w-md">
+              Your personalized running journal to help you stay motivated, organized, and consistent in building a running habit.
+            </p>
+
+            {/* Sign-In Button */}
             <button
               onClick={handleSignIn}
-              className="bg-blue-500 text-white p-2 rounded"
+              className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-200 transform hover:scale-105"
             >
               Sign In with GitHub
             </button>
+          </div>
           </>
         )}
       </main>
