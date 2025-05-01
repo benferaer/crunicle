@@ -232,7 +232,7 @@ export default function Page() {
                           const weatherForDay = weatherData?.find(
                             (weather) =>
                               format(new Date(weather.date), "yyyy-MM-dd") ===
-                              run.date
+                              format(new Date(run.date), "yyyy-MM-dd")
                           );
 
                           return (

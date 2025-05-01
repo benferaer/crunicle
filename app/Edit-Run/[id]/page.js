@@ -72,7 +72,7 @@ export default function EditRun({ params: paramsPromise }) {
     router.push("/"); // Navigate back to the homepage
   };
 
-  if (!params || !title || !description) return <p>Loading...</p>;
+  if (!params) return <p>Loading...</p>;
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen w-full bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white">
