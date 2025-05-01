@@ -9,7 +9,7 @@ import fetchWeatherData from "./weatherApi/weather";
 import { ChevronLeftIcon, ChevronRightIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 export default function Page() {
-  const { user, gitHubSignIn, firebaseSignOut } = useUserAuth();
+  const { user, gitHubSignIn, googleSignIn, firebaseSignOut } = useUserAuth();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -338,12 +338,20 @@ export default function Page() {
               Your personalized running journal to help you stay motivated, organized, and consistent in building a running habit.
             </p>
 
-            {/* Sign-In Button */}
+            {/* GitHub Sign-In Button */}
             <button
               onClick={handleSignIn}
-              className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-200 transform hover:scale-105"
+              className="bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-200 transform hover:scale-105 mb-4"
             >
               Sign In with GitHub
+            </button>
+
+            {/* Google Sign-In Button */}
+            <button
+              onClick={googleSignIn}
+              className="bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-200 transform hover:scale-105"
+            >
+              Sign In with Google
             </button>
           </div>
           </>

@@ -1,13 +1,14 @@
-"use client";
+'use client'
 
-import { useContext, createContext, useState, useEffect } from "react";
 import {
   signInWithPopup,
   signOut,
   onAuthStateChanged,
   GithubAuthProvider,
+  GoogleAuthProvider, // Import GoogleAuthProvider
 } from "firebase/auth";
 import { auth } from "./firebase";
+import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext();
 
@@ -24,6 +25,16 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
+  const googleSignIn = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+      alert("Failed to sign in with Google. Please try again.");
+    }
+  };
+
   const firebaseSignOut = () => {
     return signOut(auth);
   };
@@ -33,10 +44,10 @@ export const AuthContextProvider = ({ children }) => {
       setUser(currentUser);
     });
     return () => unsubscribe();
-  }, []); // Removed `user` from the dependency array
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, gitHubSignIn, firebaseSignOut }}>
+    <AuthContext.Provider value={{ user, gitHubSignIn, googleSignIn, firebaseSignOut }}>
       {children}
     </AuthContext.Provider>
   );
